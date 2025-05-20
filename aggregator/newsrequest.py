@@ -2,11 +2,12 @@ import requests
 
 # Uses NewsAPI 
 # Currently only uses the Everything Endpoint.
+# TODO: Add representation of Error Response.
 
 class Request:
-    def __init__(self, api_key, **args):
-        self.api_key = api_key
-        self.query = args.get("query")
+    def __init__(self, apikey, **args):
+        self.apikey = apikey
+        self.q = args.get("query")
         self.searchIn = args.get("searchIn")
         self.source = args.get("searchIN")
         self.domains = args.get("domains")
@@ -18,19 +19,32 @@ class Request:
         self.pageSize = args.get("pageSize")
         self.page = args.get("page")
 
+    def __build_request(self):
+        res = "https://newsapi.org/v2/everything?"
+        params = "&".join([k+"="+v for k, v in self.__dict__.items() if v != None])
+        res += params
+        return res
+
+    # TODO: Differenciate between OK and Error response. 
     def send_request(self):
-        pass
+        request = self.__build_request()
+        response = Response(requests.get(request).json())
+        return response
+
 
 class Response:
     def __init__(self, response):
         self.status = response.get("status")
         self.totalResults = response.get("totalResult")
         self.articles = []
-        for article in response.get("article"):
-            self.articles.append(Article(article))
+        found_articles = response.get("articles")
+        if found_articles:
+            for article in found_articles:
+                self.articles.append(Article(article))
 
     def __str__(self):
-        pass
+        return str(self.__dict__)
+
 
 class Article:
     def __init__(self, article):
