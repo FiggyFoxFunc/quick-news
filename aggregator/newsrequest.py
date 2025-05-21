@@ -1,3 +1,4 @@
+from csv import Error
 import requests
 
 # Uses NewsAPI 
@@ -35,7 +36,11 @@ class Request:
 class Response:
     def __init__(self, response):
         self.status = response.get("status")
-        self.totalResults = response.get("totalResult")
+        if self.status == "error":
+            raise ResponseException("error",  response.get("code", response.get("message")))
+        
+        self.totalResults = response.get("totalResults")
+        
         self.articles = []
         found_articles = response.get("articles")
         if found_articles:
@@ -45,6 +50,14 @@ class Response:
     def __str__(self):
         return str(self.__dict__)
 
+class ResponseException(Exception):
+    def __init__(self, status, code, message):
+        super().__init__(message)
+        self.status = status
+        self.code = code
+    
+    def __str__(self):
+        return self.message + "\nStatus: " + self.status + ", Code: " + self.code 
 
 class Article:
     def __init__(self, article):
@@ -55,7 +68,13 @@ class Article:
         self.url = article.get("url")
         self.urlToImage = article.get("urlToImage")
         self.publishedAt = article.get("publishedAt")
-        self.content = article.get("content")
+        self.content = article.get("content") # Requires full API access to view. 
 
     def __str__(self):
-        pass
+        s = ""
+        s += "Source: " + self.source["id"] + ", " + self.source["name"] + "\n"
+        s += "Author: " + self.author + "\nTitle: " + self.title + "\n"
+        s += "Description: " + self.description + "\n"
+        s += "URL: " + self.url + "\nURL to Image: " + self.urlToImage + "\n"
+        s += "Published At: " + self.publishedAt #+ "\nContent: " + self.content + "\n"
+        return s 
