@@ -72,9 +72,9 @@ class Article:
 
     def __str__(self):
         s = ""
-        s += "Source: " + self.source["id"] + ", " + self.source["name"] + "\n"
-        s += "Author: " + self.author + "\nTitle: " + self.title + "\n"
-        s += "Description: " + self.description + "\n"
-        s += "URL: " + self.url + "\nURL to Image: " + self.urlToImage + "\n"
-        s += "Published At: " + self.publishedAt #+ "\nContent: " + self.content + "\n"
+        s += "Source: " + str(self.source["id"]) + ", " + str(self.source["name"]) + "\n"
+        s += "Author: " + str(self.author) + "\nTitle: " + str(self.title) + "\n"
+        s += "Description: " + str(self.description) + "\n"
+        s += "URL: " + str(self.url) + "\nURL to Image: " + str(self.urlToImage) + "\n"
+        s += "Published At: " + str(self.publishedAt) #+ "\nContent: " + self.content + "\n"
         return s 

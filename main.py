@@ -12,18 +12,17 @@ with open("secrets.json", "r") as f:
     SECRETS = json.loads(f.read()) 
 
 
-#req = Request(
-#    SECRETS["NewsAPI"], 
-#    query="US", 
-#    _from="2025-05-21",
-#    sortBy="popularity")
+req = Request(
+    SECRETS["NewsAPI"], 
+    query="Apple", 
+    _from="2025-05-21",
+    sortBy="popularity")
 
-#res = req.send_request()
+res = req.send_request()
 
-#for article in res.articles:
-#    print(article)
-
-#print(res.totalResults)
+for article in res.articles:
+    print(article)
+print("Articles Found: ", res.totalResults)
 
 # CLI Parsing and Request Handling
 @click.command
